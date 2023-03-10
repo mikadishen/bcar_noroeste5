@@ -1,0 +1,747 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css"><link rel="stylesheet" href="css/L.Control.Locate.min.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/leaflet-control-geocoder.Geocoder.css">
+        <link rel="stylesheet" href="css/leaflet-measure.css">
+        <style>
+        #map {
+            width: 1623px;
+            height: 827px;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script><script src="js/L.Control.Locate.min.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet-control-geocoder.Geocoder.js"></script>
+        <script src="js/leaflet-measure.js"></script>
+        <script src="js/proj4.js"></script>
+        <script src="js/proj4leaflet.js"></script>
+        <script src="data/Densidadepopulacionalcomcobertura4Ge5G_1.js"></script>
+        <script src="data/Domiclioscomcoberturamvel4Ge5Gcopiar_2.js"></script>
+        <script src="data/Percentualdecobertuamvel4Ge5G_3.js"></script>
+        <script src="data/Volumemdiodeveculosemrodoviasfederaisporano_4.js"></script>
+        <script src="data/Volumemdiodeveculosemrodoviasdistritaisporano_5.js"></script>
+        <script>
+        var highlightLayer;
+        function highlightFeature(e) {
+            highlightLayer = e.target;
+
+            if (e.target.feature.geometry.type === 'LineString') {
+              highlightLayer.setStyle({
+                color: '#ffff00',
+              });
+            } else {
+              highlightLayer.setStyle({
+                fillColor: '#ffff00',
+                fillOpacity: 1
+              });
+            }
+            highlightLayer.openPopup();
+        }
+        var crs = new L.Proj.CRS('EPSG:3857', '+proj=merc +a=6378137 +b=6378137 +lat_ts=0 +lon_0=0 +x_0=0 +y_0=0 +k=1 +units=m +nadgrids=@null +wktext +no_defs', {
+            resolutions: [2800, 1400, 700, 350, 175, 84, 42, 21, 11.2, 5.6, 2.8, 1.4, 0.7, 0.35, 0.14, 0.07],
+        });
+        var map = L.map('map', {
+            crs: crs,
+            continuousWorld: false,
+            worldCopyJump: false, 
+            zoomControl:true, maxZoom:28, minZoom:1
+        }).fitBounds([[-16.060788330116367,-48.388005499912076],[-15.484411975517567,-47.211198736523386]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        L.control.locate({locateOptions: {maxZoom: 19}}).addTo(map);
+        var measureControl = new L.Control.Measure({
+            position: 'topleft',
+            primaryLengthUnit: 'meters',
+            secondaryLengthUnit: 'kilometers',
+            primaryAreaUnit: 'sqmeters',
+            secondaryAreaUnit: 'hectares'
+        });
+        measureControl.addTo(map);
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .innerHTML = '';
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .className += ' fas fa-ruler';
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+        }
+        var img_base_waze_0 = 'data/base_waze_0.png';
+        var img_bounds_base_waze_0 = [[-16.103494069490402,-48.558901772874954],[-15.448157294242822,-47.052983392549656]];
+        var layer_base_waze_0 = new L.imageOverlay(img_base_waze_0, img_bounds_base_waze_0);
+        bounds_group.addLayer(layer_base_waze_0);
+        map.addLayer(layer_base_waze_0);
+        function pop_Densidadepopulacionalcomcobertura4Ge5G_1(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">tipo</th>\
+                        <td>' + (feature.properties['tipo'] !== null ? autolinker.link(feature.properties['tipo'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Habitantes por Km² com cobertura 4G e 5G</th>\
+                        <td>' + (feature.properties['Densi_pop'] !== null ? autolinker.link(feature.properties['Densi_pop'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Densidadepopulacionalcomcobertura4Ge5G_1_0(feature) {
+            if (feature.properties['Densi_pop'] >= 0.000000 && feature.properties['Densi_pop'] <= 13841.226050 ) {
+                return {
+                pane: 'pane_Densidadepopulacionalcomcobertura4Ge5G_1',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(43,131,186,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['Densi_pop'] >= 13841.226050 && feature.properties['Densi_pop'] <= 54945.054945 ) {
+                return {
+                pane: 'pane_Densidadepopulacionalcomcobertura4Ge5G_1',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(169,220,164,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['Densi_pop'] >= 54945.054945 && feature.properties['Densi_pop'] <= 141792.326650 ) {
+                return {
+                pane: 'pane_Densidadepopulacionalcomcobertura4Ge5G_1',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(221,244,174,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['Densi_pop'] >= 141792.326650 && feature.properties['Densi_pop'] <= 191323.693000 ) {
+                return {
+                pane: 'pane_Densidadepopulacionalcomcobertura4Ge5G_1',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(237,244,107,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['Densi_pop'] >= 191323.693000 && feature.properties['Densi_pop'] <= 246476.729000 ) {
+                return {
+                pane: 'pane_Densidadepopulacionalcomcobertura4Ge5G_1',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(246,212,77,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['Densi_pop'] >= 246476.729000 && feature.properties['Densi_pop'] <= 322625.698300 ) {
+                return {
+                pane: 'pane_Densidadepopulacionalcomcobertura4Ge5G_1',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(243,135,87,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['Densi_pop'] >= 322625.698300 && feature.properties['Densi_pop'] <= 415583.244950 ) {
+                return {
+                pane: 'pane_Densidadepopulacionalcomcobertura4Ge5G_1',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(206,33,58,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['Densi_pop'] >= 415583.244950 && feature.properties['Densi_pop'] <= 4752941.176000 ) {
+                return {
+                pane: 'pane_Densidadepopulacionalcomcobertura4Ge5G_1',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(90,20,22,1.0)',
+                interactive: true,
+            }
+            }
+        }
+        map.createPane('pane_Densidadepopulacionalcomcobertura4Ge5G_1');
+        map.getPane('pane_Densidadepopulacionalcomcobertura4Ge5G_1').style.zIndex = 401;
+        map.getPane('pane_Densidadepopulacionalcomcobertura4Ge5G_1').style['mix-blend-mode'] = 'normal';
+        var layer_Densidadepopulacionalcomcobertura4Ge5G_1 = new L.geoJson(json_Densidadepopulacionalcomcobertura4Ge5G_1, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Densidadepopulacionalcomcobertura4Ge5G_1',
+            layerName: 'layer_Densidadepopulacionalcomcobertura4Ge5G_1',
+            pane: 'pane_Densidadepopulacionalcomcobertura4Ge5G_1',
+            onEachFeature: pop_Densidadepopulacionalcomcobertura4Ge5G_1,
+            style: style_Densidadepopulacionalcomcobertura4Ge5G_1_0,
+        });
+        bounds_group.addLayer(layer_Densidadepopulacionalcomcobertura4Ge5G_1);
+        map.addLayer(layer_Densidadepopulacionalcomcobertura4Ge5G_1);
+        function pop_Domiclioscomcoberturamvel4Ge5Gcopiar_2(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">tipo</th>\
+                        <td>' + (feature.properties['tipo'] !== null ? autolinker.link(feature.properties['tipo'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Domicilios com cobertura 4G e 5G</th>\
+                        <td>' + (feature.properties['sumdom'] !== null ? autolinker.link(feature.properties['sumdom'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Domiclioscomcoberturamvel4Ge5Gcopiar_2_0(feature) {
+            if (feature.properties['sumdom'] >= 0.000000 && feature.properties['sumdom'] <= 1386.000000 ) {
+                return {
+                pane: 'pane_Domiclioscomcoberturamvel4Ge5Gcopiar_2',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(43,131,186,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['sumdom'] >= 1386.000000 && feature.properties['sumdom'] <= 2900.000000 ) {
+                return {
+                pane: 'pane_Domiclioscomcoberturamvel4Ge5Gcopiar_2',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(145,203,168,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['sumdom'] >= 2900.000000 && feature.properties['sumdom'] <= 3933.000000 ) {
+                return {
+                pane: 'pane_Domiclioscomcoberturamvel4Ge5Gcopiar_2',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(221,241,180,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['sumdom'] >= 3933.000000 && feature.properties['sumdom'] <= 5061.000000 ) {
+                return {
+                pane: 'pane_Domiclioscomcoberturamvel4Ge5Gcopiar_2',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(254,223,153,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['sumdom'] >= 5061.000000 && feature.properties['sumdom'] <= 7686.000000 ) {
+                return {
+                pane: 'pane_Domiclioscomcoberturamvel4Ge5Gcopiar_2',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(245,144,83,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['sumdom'] >= 7686.000000 && feature.properties['sumdom'] <= 16401.000000 ) {
+                return {
+                pane: 'pane_Domiclioscomcoberturamvel4Ge5Gcopiar_2',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(215,25,28,1.0)',
+                interactive: true,
+            }
+            }
+        }
+        map.createPane('pane_Domiclioscomcoberturamvel4Ge5Gcopiar_2');
+        map.getPane('pane_Domiclioscomcoberturamvel4Ge5Gcopiar_2').style.zIndex = 402;
+        map.getPane('pane_Domiclioscomcoberturamvel4Ge5Gcopiar_2').style['mix-blend-mode'] = 'normal';
+        var layer_Domiclioscomcoberturamvel4Ge5Gcopiar_2 = new L.geoJson(json_Domiclioscomcoberturamvel4Ge5Gcopiar_2, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Domiclioscomcoberturamvel4Ge5Gcopiar_2',
+            layerName: 'layer_Domiclioscomcoberturamvel4Ge5Gcopiar_2',
+            pane: 'pane_Domiclioscomcoberturamvel4Ge5Gcopiar_2',
+            onEachFeature: pop_Domiclioscomcoberturamvel4Ge5Gcopiar_2,
+            style: style_Domiclioscomcoberturamvel4Ge5Gcopiar_2_0,
+        });
+        bounds_group.addLayer(layer_Domiclioscomcoberturamvel4Ge5Gcopiar_2);
+        map.addLayer(layer_Domiclioscomcoberturamvel4Ge5Gcopiar_2);
+        function pop_Percentualdecobertuamvel4Ge5G_3(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">tipo</th>\
+                        <td>' + (feature.properties['tipo'] !== null ? autolinker.link(feature.properties['tipo'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Percentual de cobertura de rede 4G e 5G</th>\
+                        <td>' + (feature.properties['cob'] !== null ? autolinker.link(feature.properties['cob'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Percentualdecobertuamvel4Ge5G_3_0(feature) {
+            if (feature.properties['cob'] >= 0.056988 && feature.properties['cob'] <= 20.000000 ) {
+                return {
+                pane: 'pane_Percentualdecobertuamvel4Ge5G_3',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(215,25,28,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['cob'] >= 20.000000 && feature.properties['cob'] <= 40.000000 ) {
+                return {
+                pane: 'pane_Percentualdecobertuamvel4Ge5G_3',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(253,174,97,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['cob'] >= 40.000000 && feature.properties['cob'] <= 60.000000 ) {
+                return {
+                pane: 'pane_Percentualdecobertuamvel4Ge5G_3',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,255,191,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['cob'] >= 60.000000 && feature.properties['cob'] <= 80.000000 ) {
+                return {
+                pane: 'pane_Percentualdecobertuamvel4Ge5G_3',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(171,221,164,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['cob'] >= 80.000000 && feature.properties['cob'] <= 100.000000 ) {
+                return {
+                pane: 'pane_Percentualdecobertuamvel4Ge5G_3',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(43,131,186,1.0)',
+                interactive: true,
+            }
+            }
+        }
+        map.createPane('pane_Percentualdecobertuamvel4Ge5G_3');
+        map.getPane('pane_Percentualdecobertuamvel4Ge5G_3').style.zIndex = 403;
+        map.getPane('pane_Percentualdecobertuamvel4Ge5G_3').style['mix-blend-mode'] = 'normal';
+        var layer_Percentualdecobertuamvel4Ge5G_3 = new L.geoJson(json_Percentualdecobertuamvel4Ge5G_3, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Percentualdecobertuamvel4Ge5G_3',
+            layerName: 'layer_Percentualdecobertuamvel4Ge5G_3',
+            pane: 'pane_Percentualdecobertuamvel4Ge5G_3',
+            onEachFeature: pop_Percentualdecobertuamvel4Ge5G_3,
+            style: style_Percentualdecobertuamvel4Ge5G_3_0,
+        });
+        bounds_group.addLayer(layer_Percentualdecobertuamvel4Ge5G_3);
+        map.addLayer(layer_Percentualdecobertuamvel4Ge5G_3);
+        function pop_Volumemdiodeveculosemrodoviasfederaisporano_4(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Rodovia</th>\
+                        <td>' + (feature.properties['Layer'] !== null ? autolinker.link(feature.properties['Layer'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Km inicial</th>\
+                        <td>' + (feature.properties['Km_I'] !== null ? autolinker.link(feature.properties['Km_I'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Km final</th>\
+                        <td>' + (feature.properties['Km_F'] !== null ? autolinker.link(feature.properties['Km_F'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Volumemdiodeveculosemrodoviasfederaisporano_4_0(feature) {
+            if (feature.properties['q2wHide_VDMa_Total'] >= 0.000000 && feature.properties['q2wHide_VDMa_Total'] <= 3096.750000 ) {
+                return {
+                pane: 'pane_Volumemdiodeveculosemrodoviasfederaisporano_4',
+                opacity: 1,
+                color: 'rgba(255,255,178,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['q2wHide_VDMa_Total'] >= 3096.750000 && feature.properties['q2wHide_VDMa_Total'] <= 6193.500000 ) {
+                return {
+                pane: 'pane_Volumemdiodeveculosemrodoviasfederaisporano_4',
+                opacity: 1,
+                color: 'rgba(254,226,129,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['q2wHide_VDMa_Total'] >= 6193.500000 && feature.properties['q2wHide_VDMa_Total'] <= 9290.250000 ) {
+                return {
+                pane: 'pane_Volumemdiodeveculosemrodoviasfederaisporano_4',
+                opacity: 1,
+                color: 'rgba(254,195,87,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['q2wHide_VDMa_Total'] >= 9290.250000 && feature.properties['q2wHide_VDMa_Total'] <= 12387.000000 ) {
+                return {
+                pane: 'pane_Volumemdiodeveculosemrodoviasfederaisporano_4',
+                opacity: 1,
+                color: 'rgba(253,159,69,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['q2wHide_VDMa_Total'] >= 12387.000000 && feature.properties['q2wHide_VDMa_Total'] <= 15483.750000 ) {
+                return {
+                pane: 'pane_Volumemdiodeveculosemrodoviasfederaisporano_4',
+                opacity: 1,
+                color: 'rgba(249,118,52,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['q2wHide_VDMa_Total'] >= 15483.750000 && feature.properties['q2wHide_VDMa_Total'] <= 18580.500000 ) {
+                return {
+                pane: 'pane_Volumemdiodeveculosemrodoviasfederaisporano_4',
+                opacity: 1,
+                color: 'rgba(242,71,36,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['q2wHide_VDMa_Total'] >= 18580.500000 && feature.properties['q2wHide_VDMa_Total'] <= 21677.250000 ) {
+                return {
+                pane: 'pane_Volumemdiodeveculosemrodoviasfederaisporano_4',
+                opacity: 1,
+                color: 'rgba(218,34,35,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['q2wHide_VDMa_Total'] >= 21677.250000 && feature.properties['q2wHide_VDMa_Total'] <= 24774.000000 ) {
+                return {
+                pane: 'pane_Volumemdiodeveculosemrodoviasfederaisporano_4',
+                opacity: 1,
+                color: 'rgba(189,0,38,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+        }
+        map.createPane('pane_Volumemdiodeveculosemrodoviasfederaisporano_4');
+        map.getPane('pane_Volumemdiodeveculosemrodoviasfederaisporano_4').style.zIndex = 404;
+        map.getPane('pane_Volumemdiodeveculosemrodoviasfederaisporano_4').style['mix-blend-mode'] = 'normal';
+        var layer_Volumemdiodeveculosemrodoviasfederaisporano_4 = new L.geoJson(json_Volumemdiodeveculosemrodoviasfederaisporano_4, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Volumemdiodeveculosemrodoviasfederaisporano_4',
+            layerName: 'layer_Volumemdiodeveculosemrodoviasfederaisporano_4',
+            pane: 'pane_Volumemdiodeveculosemrodoviasfederaisporano_4',
+            onEachFeature: pop_Volumemdiodeveculosemrodoviasfederaisporano_4,
+            style: style_Volumemdiodeveculosemrodoviasfederaisporano_4_0,
+        });
+        bounds_group.addLayer(layer_Volumemdiodeveculosemrodoviasfederaisporano_4);
+        map.addLayer(layer_Volumemdiodeveculosemrodoviasfederaisporano_4);
+        function pop_Volumemdiodeveculosemrodoviasdistritaisporano_5(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Rodovia</th>\
+                        <td>' + (feature.properties['Layer'] !== null ? autolinker.link(feature.properties['Layer'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Km inicial</th>\
+                        <td>' + (feature.properties['Km_I'] !== null ? autolinker.link(feature.properties['Km_I'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Km final</th>\
+                        <td>' + (feature.properties['Km_F'] !== null ? autolinker.link(feature.properties['Km_F'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Volume médio de circulação de veículos rod.distrital</th>\
+                        <td>' + (feature.properties['VMD'] !== null ? autolinker.link(feature.properties['VMD'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Volumemdiodeveculosemrodoviasdistritaisporano_5_0(feature) {
+            if (feature.properties['VMD'] >= 0.000000 && feature.properties['VMD'] <= 6046.750000 ) {
+                return {
+                pane: 'pane_Volumemdiodeveculosemrodoviasdistritaisporano_5',
+                opacity: 1,
+                color: 'rgba(255,255,212,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['VMD'] >= 6046.750000 && feature.properties['VMD'] <= 12093.500000 ) {
+                return {
+                pane: 'pane_Volumemdiodeveculosemrodoviasdistritaisporano_5',
+                opacity: 1,
+                color: 'rgba(254,233,172,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['VMD'] >= 12093.500000 && feature.properties['VMD'] <= 18140.250000 ) {
+                return {
+                pane: 'pane_Volumemdiodeveculosemrodoviasdistritaisporano_5',
+                opacity: 1,
+                color: 'rgba(254,208,128,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['VMD'] >= 18140.250000 && feature.properties['VMD'] <= 24187.000000 ) {
+                return {
+                pane: 'pane_Volumemdiodeveculosemrodoviasdistritaisporano_5',
+                opacity: 1,
+                color: 'rgba(254,171,70,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['VMD'] >= 24187.000000 && feature.properties['VMD'] <= 30233.750000 ) {
+                return {
+                pane: 'pane_Volumemdiodeveculosemrodoviasdistritaisporano_5',
+                opacity: 1,
+                color: 'rgba(243,136,33,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['VMD'] >= 30233.750000 && feature.properties['VMD'] <= 36280.500000 ) {
+                return {
+                pane: 'pane_Volumemdiodeveculosemrodoviasdistritaisporano_5',
+                opacity: 1,
+                color: 'rgba(142,66,11,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['VMD'] >= 36280.500000 && feature.properties['VMD'] <= 42327.250000 ) {
+                return {
+                pane: 'pane_Volumemdiodeveculosemrodoviasdistritaisporano_5',
+                opacity: 1,
+                color: 'rgba(100,40,5,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+            if (feature.properties['VMD'] >= 42327.250000 && feature.properties['VMD'] <= 48374.000000 ) {
+                return {
+                pane: 'pane_Volumemdiodeveculosemrodoviasdistritaisporano_5',
+                opacity: 1,
+                color: 'rgba(35,12,1,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+            }
+        }
+        map.createPane('pane_Volumemdiodeveculosemrodoviasdistritaisporano_5');
+        map.getPane('pane_Volumemdiodeveculosemrodoviasdistritaisporano_5').style.zIndex = 405;
+        map.getPane('pane_Volumemdiodeveculosemrodoviasdistritaisporano_5').style['mix-blend-mode'] = 'normal';
+        var layer_Volumemdiodeveculosemrodoviasdistritaisporano_5 = new L.geoJson(json_Volumemdiodeveculosemrodoviasdistritaisporano_5, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Volumemdiodeveculosemrodoviasdistritaisporano_5',
+            layerName: 'layer_Volumemdiodeveculosemrodoviasdistritaisporano_5',
+            pane: 'pane_Volumemdiodeveculosemrodoviasdistritaisporano_5',
+            onEachFeature: pop_Volumemdiodeveculosemrodoviasdistritaisporano_5,
+            style: style_Volumemdiodeveculosemrodoviasdistritaisporano_5_0,
+        });
+        bounds_group.addLayer(layer_Volumemdiodeveculosemrodoviasdistritaisporano_5);
+        map.addLayer(layer_Volumemdiodeveculosemrodoviasdistritaisporano_5);
+        var osmGeocoder = new L.Control.Geocoder({
+            collapsed: true,
+            position: 'topleft',
+            text: 'Search',
+            title: 'Testing'
+        }).addTo(map);
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .className += ' fa fa-search';
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .title += 'Search for a place';
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'Volume médio de veículos em rodovias distritais por ano<br /><table><tr><td style="text-align: center;"><img src="legend/Volumemdiodeveculosemrodoviasdistritaisporano_5_Até6047veículosano0.png" /></td><td>Até 6047veículos/ano</td></tr><tr><td style="text-align: center;"><img src="legend/Volumemdiodeveculosemrodoviasdistritaisporano_5_604712094veículosano1.png" /></td><td>6047 - 12094 veículos/ano</td></tr><tr><td style="text-align: center;"><img src="legend/Volumemdiodeveculosemrodoviasdistritaisporano_5_1209418140veículosano2.png" /></td><td>12094 - 18140 veículos/ano</td></tr><tr><td style="text-align: center;"><img src="legend/Volumemdiodeveculosemrodoviasdistritaisporano_5_1814024187veículosano3.png" /></td><td>18140 - 24187 veículos/ano</td></tr><tr><td style="text-align: center;"><img src="legend/Volumemdiodeveculosemrodoviasdistritaisporano_5_2418730234veículosano4.png" /></td><td>24187 - 30234 veículos/ano</td></tr><tr><td style="text-align: center;"><img src="legend/Volumemdiodeveculosemrodoviasdistritaisporano_5_3023436281veículosano5.png" /></td><td>30234 - 36281 veículos/ano</td></tr><tr><td style="text-align: center;"><img src="legend/Volumemdiodeveculosemrodoviasdistritaisporano_5_3628142327veículosano6.png" /></td><td>36281 - 42327 veículos/ano</td></tr><tr><td style="text-align: center;"><img src="legend/Volumemdiodeveculosemrodoviasdistritaisporano_5_4232748374veículosano7.png" /></td><td>42327 - 48374 veículos/ano</td></tr></table>': layer_Volumemdiodeveculosemrodoviasdistritaisporano_5,'Volume médio de veículos em rodovias federais por ano<br /><table><tr><td style="text-align: center;"><img src="legend/Volumemdiodeveculosemrodoviasfederaisporano_4_Até3097veículosano0.png" /></td><td>Até 3097 veículos/ano</td></tr><tr><td style="text-align: center;"><img src="legend/Volumemdiodeveculosemrodoviasfederaisporano_4_30976194veículosano1.png" /></td><td>3097 - 6194 veículos/ano</td></tr><tr><td style="text-align: center;"><img src="legend/Volumemdiodeveculosemrodoviasfederaisporano_4_61949290veículosano2.png" /></td><td>6194 - 9290 veículos/ano</td></tr><tr><td style="text-align: center;"><img src="legend/Volumemdiodeveculosemrodoviasfederaisporano_4_929012387veículosano3.png" /></td><td>9290 - 12387 veículos/ano</td></tr><tr><td style="text-align: center;"><img src="legend/Volumemdiodeveculosemrodoviasfederaisporano_4_1238715484veículosano4.png" /></td><td>12387 - 15484 veículos/ano</td></tr><tr><td style="text-align: center;"><img src="legend/Volumemdiodeveculosemrodoviasfederaisporano_4_1548418581veículosano5.png" /></td><td>15484 - 18581 veículos/ano</td></tr><tr><td style="text-align: center;"><img src="legend/Volumemdiodeveculosemrodoviasfederaisporano_4_1858121677veículosano6.png" /></td><td>18581 - 21677 veículos/ano</td></tr><tr><td style="text-align: center;"><img src="legend/Volumemdiodeveculosemrodoviasfederaisporano_4_Acimade21677veículosano7.png" /></td><td>Acima de 21677 veículos/ano</td></tr></table>': layer_Volumemdiodeveculosemrodoviasfederaisporano_4,'Percentual de cobertua móvel 4G e 5G<br /><table><tr><td style="text-align: center;"><img src="legend/Percentualdecobertuamvel4Ge5G_3_0200.png" /></td><td>0 - 20 %</td></tr><tr><td style="text-align: center;"><img src="legend/Percentualdecobertuamvel4Ge5G_3_20401.png" /></td><td>20 - 40  %</td></tr><tr><td style="text-align: center;"><img src="legend/Percentualdecobertuamvel4Ge5G_3_40602.png" /></td><td>40 - 60  %</td></tr><tr><td style="text-align: center;"><img src="legend/Percentualdecobertuamvel4Ge5G_3_60803.png" /></td><td>60 - 80  %</td></tr><tr><td style="text-align: center;"><img src="legend/Percentualdecobertuamvel4Ge5G_3_801004.png" /></td><td>80 - 100  %</td></tr></table>': layer_Percentualdecobertuamvel4Ge5G_3,'Domicílios com cobertura móvel 4G e 5G  copiar<br /><table><tr><td style="text-align: center;"><img src="legend/Domiclioscomcoberturamvel4Ge5Gcopiar_2_013860.png" /></td><td>0 - 1386</td></tr><tr><td style="text-align: center;"><img src="legend/Domiclioscomcoberturamvel4Ge5Gcopiar_2_138629001.png" /></td><td>1386 - 2900</td></tr><tr><td style="text-align: center;"><img src="legend/Domiclioscomcoberturamvel4Ge5Gcopiar_2_290039332.png" /></td><td>2900 - 3933</td></tr><tr><td style="text-align: center;"><img src="legend/Domiclioscomcoberturamvel4Ge5Gcopiar_2_393350613.png" /></td><td>3933 - 5061</td></tr><tr><td style="text-align: center;"><img src="legend/Domiclioscomcoberturamvel4Ge5Gcopiar_2_506176864.png" /></td><td>5061 - 7686</td></tr><tr><td style="text-align: center;"><img src="legend/Domiclioscomcoberturamvel4Ge5Gcopiar_2_7686164015.png" /></td><td>7686 - 16401</td></tr></table>': layer_Domiclioscomcoberturamvel4Ge5Gcopiar_2,'Densidade populacional com cobertura 4G e 5G<br /><table><tr><td style="text-align: center;"><img src="legend/Densidadepopulacionalcomcobertura4Ge5G_1_013841habkm20.png" /></td><td>0 - 13841 hab/km2</td></tr><tr><td style="text-align: center;"><img src="legend/Densidadepopulacionalcomcobertura4Ge5G_1_1384154945habkm21.png" /></td><td>13841 - 54945 hab/km2</td></tr><tr><td style="text-align: center;"><img src="legend/Densidadepopulacionalcomcobertura4Ge5G_1_54945141792habkm22.png" /></td><td>54945 - 141792 hab/km2</td></tr><tr><td style="text-align: center;"><img src="legend/Densidadepopulacionalcomcobertura4Ge5G_1_141792191324habkm23.png" /></td><td>141792 - 191324 hab/km2</td></tr><tr><td style="text-align: center;"><img src="legend/Densidadepopulacionalcomcobertura4Ge5G_1_191324246477habkm24.png" /></td><td>191324 - 246477 hab/km2</td></tr><tr><td style="text-align: center;"><img src="legend/Densidadepopulacionalcomcobertura4Ge5G_1_246477322626habkm25.png" /></td><td>246477 - 322626 hab/km2</td></tr><tr><td style="text-align: center;"><img src="legend/Densidadepopulacionalcomcobertura4Ge5G_1_322626415583habkm26.png" /></td><td>322626 - 415583 hab/km2</td></tr><tr><td style="text-align: center;"><img src="legend/Densidadepopulacionalcomcobertura4Ge5G_1_4155834752941habkm27.png" /></td><td>415583 - 4752941 hab/km2</td></tr></table>': layer_Densidadepopulacionalcomcobertura4Ge5G_1,"base_waze": layer_base_waze_0,}).addTo(map);
+        setBounds();
+        L.ImageOverlay.include({
+            getBounds: function () {
+                return this._bounds;
+            }
+        });
+        </script>
+    </body>
+</html>
